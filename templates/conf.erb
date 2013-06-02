@@ -3,8 +3,8 @@ GPG_PW=<%=passphrase%>
 # Where to backup to
 TARGET=<%=target%>
 
-TARGET_USER=<%=user%>
-TARGET_PASS=<%=password%>
+TARGET_USER=<%=target_user%>
+TARGET_PASS=<%=target_pass%>
 
 # See exclude file
 SOURCE=<%=source%>
@@ -15,7 +15,7 @@ MAX_FULLBKP_AGE=<%=max_fullbkp_age%>
 DUPL_PARAMS="$DUPL_PARAMS --full-if-older-than $MAX_FULLBKP_AGE " 
 
 VOLSIZE=<%=volsize%>
-DUPL_PARAMS="$DUPL_PARAMS --volsize $VOLSIZE "
+DUPL_PARAMS="$DUPL_PARAMS --volsize $VOLSIZE <%=dupliticy_options%>"
 
 VERBOSITY=5
 TEMP_DIR=<%=tmp%>
