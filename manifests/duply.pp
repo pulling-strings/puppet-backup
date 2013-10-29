@@ -16,6 +16,11 @@ define backup::duply(
   $dupliticy_options=''
 ) {
 
+  if($osfamily == 'Redhat') {
+    include epel
+    Yumrepo <||> -> Package <||>
+  }
+
   if !defined(Package['duply']) {
     package{'duply':
       ensure  => present
@@ -29,6 +34,12 @@ define backup::duply(
   }
 
   if !defined(Package['python-boto']) {
+    package{'python-boto':
+      ensure  => present
+    }
+  }
+
+  if !defined(Package['python-paramiko']) {
     package{'python-boto':
       ensure  => present
     }
