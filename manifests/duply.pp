@@ -40,7 +40,7 @@ define backup::duply(
   }
 
   if !defined(Package['python-paramiko']) {
-    package{'python-boto':
+    package{'python-paramiko':
       ensure  => present
     }
   }
