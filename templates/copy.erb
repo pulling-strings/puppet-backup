@@ -1,0 +1,11 @@
+start on (filesystem and net-device-up and stopped udevtrigger)
+
+stop on runlevel [06]
+respawn
+
+script
+  sudo chown <%=@sysuser%> /var/log/copy.log
+end script
+
+ exec sudo -u <%=@sysuser%> /opt/copy/x86_64/CopyConsole -r=/media/contents-a/Copy -u=<%=@user%> --data=/home/<%=@user%>/.copy  --daemon >> /var/log/copy.log
+
