@@ -1,9 +1,12 @@
 # Settings up copy.com
 class backup::copy(
   $url     = 'https://copy.com/install/linux/Copy.tgz',
-  $sysuser = '',
-  $user    = ''
+  $sysuser = undef,
+  $user    = '',
+  $folder  = ''
   ){
+
+  validate_string($sysuser)
 
   archive {'Copy':
     ensure     => present,

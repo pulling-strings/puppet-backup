@@ -7,5 +7,5 @@ script
   sudo chown <%=@sysuser%> /var/log/copy.log
 end script
 
- exec sudo -u <%=@sysuser%> /opt/copy/x86_64/CopyConsole -r=/media/contents-a/Copy -u=<%=@user%> --data=/home/<%=@user%>/.copy  --daemon >> /var/log/copy.log
+exec sudo -u <%=@sysuser%> /opt/copy/x86_64/CopyConsole -r=<%=@folder%> -u=<%=@user%> --data=/home/<%=@user%>/.copy  --daemon >> /var/log/copy.log
 
