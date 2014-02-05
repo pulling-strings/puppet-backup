@@ -1,4 +1,5 @@
-start on (filesystem and net-device-up and stopped udevtrigger)
+# start on (filesystem and net-device-up and stopped udevtrigger)
+start on (local-filesystems and net-device-up IFACE!=lo)
 
 stop on runlevel [06]
 respawn
