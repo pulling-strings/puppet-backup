@@ -1,12 +1,12 @@
-# Settings up copy.com
+# Settings up copy.com, you must pass sysuser user and folder
 class backup::copy(
   $url     = 'https://copy.com/install/linux/Copy.tgz',
-  $sysuser = undef,
-  $user    = '',
-  $folder  = ''
+  $sysuser = false,
+  $user    = false,
+  $folder  = false
   ){
 
-  validate_string($sysuser)
+  validate_string($sysuser, $user, $folder)
 
   archive {'Copy':
     ensure     => present,
@@ -23,5 +23,10 @@ class backup::copy(
     content => template('backup/copy.erb'),
     owner   => root,
     group   => root,
+  } ->
+
+  file{'/etc/init.d/copy':
+    ensure => link,
+    target => '/etc/init/copy.conf'
   }
 }
