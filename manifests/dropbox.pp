@@ -7,10 +7,10 @@ class backup::dropbox($headless=false) {
 
   if($headless) {
     archive { 'dropbox-deamon':
-      ensure        => present,
-      url           => 'https://www.dropbox.com/download?plat=lnx.x86_64',
-      digest_string => 'fb324583a0945b96d327f206350f1f32',
-      target        => '/usr/local/dropbox',
+      ensure   => present,
+      url      => 'https://www.dropbox.com/download?plat=lnx.x86_64',
+      checksum => false,
+      target   => '/usr/local/dropbox',
     }
 
     group{'dropbox':
