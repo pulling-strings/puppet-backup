@@ -1,7 +1,7 @@
 # Sets up a duply backup job
 define backup::duply(
   $source='',
-  $passphrase='',
+  $passphrase=false,
   $target='',
   $user='',
   $password='',
@@ -11,45 +11,23 @@ define backup::duply(
   $volsize=50,
   $globs='',
   $tmp='/tmp',
-  $target_user=undef,
-  $target_pass=undef,
+  $target_user=false,
+  $target_pass=false,
   $dupliticy_options=''
 ) {
 
-  if($osfamily == 'Redhat') {
+  validate_string($target_pass, $target_user, $passphrase)
+
+  if($::osfamily == 'Redhat') {
     include epel
     Yumrepo <||> -> Package <||>
   }
 
-  if !defined(Package['duply']) {
-    package{'duply':
-      ensure  => present
-    }
-  }
-
-  if !defined(Package['duplicity']) {
-    package{['duplicity']:
-      ensure  => present
-    }
-  }
-
-  if !defined(Package['python-boto']) {
-    package{'python-boto':
-      ensure  => present
-    }
-  }
-
-  if !defined(Package['python-paramiko']) {
-    package{'python-paramiko':
-      ensure  => present
-    }
-  }
-
-  if !defined(File['/etc/duply']) {
-    file{['/etc/duply']:
-      ensure => directory,
-    }
-  }
+  ensure_resource('package', 'duply', {'ensure' => 'present' })
+  ensure_resource('package', 'duplicity', {'ensure' => 'present' })
+  ensure_resource('package', 'python-boto', {'ensure' => 'present' })
+  ensure_resource('package', 'python-paramiko', {'ensure' => 'present' })
+  ensure_resource('file', '/etc/duply', {'ensure' => 'directory' })
 
   file{"/etc/duply/${name}":
     ensure => directory,
