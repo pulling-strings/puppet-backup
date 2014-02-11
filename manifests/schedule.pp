@@ -1,11 +1,11 @@
-# Schedule a daily backup job. 
-define backup::schedule {
+# Schedule a daily backup job.
+define backup::schedule($precondition='true') {
 
-  file { "/etc/cron.daily/duply-$name":
-    ensure=> file,
-    mode  => '0777',
+  file { "/etc/cron.daily/duply-${name}":
+    ensure  => file,
+    mode    => '0777',
     content => template('backup/cron.erb'),
-    owner => root,
-    group => root,
+    owner   => root,
+    group   => root,
   }
 }

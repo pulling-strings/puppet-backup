@@ -1,6 +1,9 @@
 #!/bin/sh
 
 LOG=/var/log/duply_<%=@name%>.log
-echo "*** Starting backup $(date -R) ***" >> $LOG
-flock -n /tmp/<%=@name%>-backup duply <%=@name%> backup_verify_purge --force --log-file $LOG
-echo "*** Backup done $(date -R) ***" >> $LOG
+if [ <%=@precondition%> ] 
+then
+ echo "*** Starting backup $(date -R) ***" >> $LOG
+ flock -n /tmp/<%=@name%>-backup duply <%=@name%> backup_verify_purge --force --log-file $LOG
+ echo "*** Backup done $(date -R) ***" >> $LOG
+fi
