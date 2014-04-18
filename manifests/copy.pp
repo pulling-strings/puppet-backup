@@ -6,6 +6,7 @@ class backup::copy(
   $folder  = false
   ){
 
+  include backup::ulimit
   validate_string($sysuser, $user, $folder)
 
   archive {'Copy':

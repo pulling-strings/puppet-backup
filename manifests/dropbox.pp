@@ -5,6 +5,8 @@
 # /usr/local/dropbox/.dropbox-dist/dropboxd
 class backup::dropbox($headless=false) {
 
+  include backup::ulimit
+
   if($headless) {
     archive { 'dropbox-deamon':
       ensure   => present,
