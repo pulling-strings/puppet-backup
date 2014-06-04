@@ -9,14 +9,16 @@ class backup::copy(
   include backup::ulimit
   validate_string($sysuser, $user, $folder)
 
-  archive {'Copy':
+  archive {'copy':
     ensure     => present,
     url        => $url,
     checksum   => false,
     src_target => '/var/tmp',
-    target     => '/opt',
+    target     => '/opt/',
     extension  => 'tar.gz',
+    root_dir   => 'copy'
   }
+
 
   file { '/etc/init/copy.conf':
     ensure  => file,
