@@ -22,6 +22,11 @@ class backup::syncthing {
     group => root,
   } ->
 
+  file{'/etc/init.d/syncthing':
+    ensure => link,
+    target => '/etc/init/syncthing'
+  } ->
+
   service{'syncthing':
     ensure    => running,
     enable    => true,
