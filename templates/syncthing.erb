@@ -1,0 +1,14 @@
+description "Syncthing deamon"
+
+start on (starting ufw)
+stop on [!023456]
+
+env STNORESTART=yes
+env HOME=/opt/syncthing/<%=@release%>
+
+respawn
+
+# setuid syncthing
+# setgid syncthing
+
+exec /opt/syncthing/<%=@release%>/syncthing -home=/opt/syncthing/.config/syncthing >> /var/log/syncthing.log 2>&1
