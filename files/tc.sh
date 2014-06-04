@@ -9,6 +9,8 @@ IF=$2 # Interface
 # Upload limit (in mega bits) like 45kbps 
 UPLD=$3 # UPLOAD Limit
 
+PORT=$4 # Port number like 2222
+
 # Filter options for limiting the intended interface.
 U32="$TC filter add dev $IF protocol ip parent 1:0 prio 1 u32"
 
@@ -18,7 +20,7 @@ $TC qdisc add dev $IF root handle 1: htb default 30
 #$TC class add dev $IF parent 1: classid 1:1 htb rate $DNLD
 $TC class add dev $IF parent 1: classid 1:2 htb rate $UPLD
 #$U32 match ip dst $IP/32 flowid 1:1, $4 is outgoing port number (2222)
-$U32 match ip dport $4 0xffff flowid 1:2
+$U32 match ip dport $PORT 0xffff flowid 1:2
 }
 
 stop() {
