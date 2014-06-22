@@ -1,6 +1,6 @@
 # setting up https://github.com/calmh/syncthing
 class backup::syncthing($repos=[]) {
-  $version = 'v0.8.12'
+  $version = 'v0.8.15'
   $release = "syncthing-linux-amd64-${version}"
   $url = "https://github.com/calmh/syncthing/releases/download/${version}/${release}.tar.gz"
 
@@ -35,6 +35,7 @@ class backup::syncthing($repos=[]) {
 
   file{['/opt/syncthing/.config','/opt/syncthing/.config/syncthing']:
     ensure => directory,
+    require => Archive['syncthing']
   } ->
 
   file { '/opt/syncthing/.config/syncthing/config.xml':
