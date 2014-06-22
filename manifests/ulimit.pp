@@ -2,7 +2,7 @@
 class backup::ulimit {
   file_line { 'max-watches':
     path => '/etc/sysctl.conf',
-    line => 'fs.inotify.max_user_watches = 20000'
+    line => 'fs.inotify.max_user_watches = 200000'
   }
 
   file_line { 'file-max':
