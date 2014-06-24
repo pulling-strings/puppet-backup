@@ -1,16 +1,16 @@
 # setting up https://github.com/calmh/syncthing
 class backup::syncthing($repos=[]) {
-  $version = 'v0.8.15'
+  $version = 'v0.8.16'
   $release = "syncthing-linux-amd64-${version}"
   $url = "https://github.com/calmh/syncthing/releases/download/${version}/${release}.tar.gz"
 
   archive {'syncthing':
-    ensure     => present,
-    url        => $url,
-    checksum   => false,
-    src_target => '/usr/src/',
-    target     => '/opt/',
-    extension  => 'tar.gz',
+    ensure        => present,
+    url           => $url,
+    digest_string => 'f6549b777f0df3a664e128eab0b25169',
+    src_target    => '/usr/src',
+    target        => '/opt/',
+    extension     => 'tar.gz',
   }
 
   file { '/etc/init/syncthing.conf':
