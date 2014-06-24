@@ -4,7 +4,7 @@ class backup::syncthing($repos=[]) {
   $release = "syncthing-linux-amd64-${version}"
   $url = "https://github.com/calmh/syncthing/releases/download/${version}/${release}.tar.gz"
 
-  archive {'syncthing':
+  archive {"syncthing-${version}":
     ensure        => present,
     url           => $url,
     digest_string => 'f6549b777f0df3a664e128eab0b25169',
@@ -35,7 +35,7 @@ class backup::syncthing($repos=[]) {
 
   file{['/opt/syncthing/.config','/opt/syncthing/.config/syncthing']:
     ensure => directory,
-    require => Archive['syncthing']
+    require => Archive["syncthing-${version}"]
   } ->
 
   file { '/opt/syncthing/.config/syncthing/config.xml':
@@ -44,6 +44,6 @@ class backup::syncthing($repos=[]) {
     content => template('backup/config.xml.erb'),
     owner   => root,
     group   => root,
-    require => Archive['syncthing']
+    require => Archive["syncthing-${version}"]
   } ~> Service['syncthing']
 }
