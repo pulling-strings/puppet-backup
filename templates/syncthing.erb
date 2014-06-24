@@ -11,4 +11,4 @@ respawn
 # setuid syncthing
 # setgid syncthing
 
-exec /opt/syncthing/<%=@release%>/syncthing -home=/opt/syncthing/.config/syncthing >> /var/log/syncthing.log 2>&1
+exec /opt/syncthing-<%=@version%>/<%=@release%>/syncthing -home=/opt/syncthing-<%=@version%>/.config/syncthing >> /var/log/syncthing.log 2>&1
