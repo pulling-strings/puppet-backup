@@ -33,12 +33,12 @@ class backup::syncthing($repos=[]) {
     hasstatus => true,
   }
 
-  file{['/opt/syncthing/.config','/opt/syncthing/.config/syncthing']:
+  file{["/opt/syncthing-${version}/.config","/opt/syncthing-${version}/.config/syncthing"]:
     ensure => directory,
     require => Archive["syncthing-${version}"]
   } ->
 
-  file { '/opt/syncthing/.config/syncthing/config.xml':
+  file { "/opt/syncthing-${version}/.config/syncthing/config.xml":
     ensure  => file,
     mode    => 'u+rw',
     content => template('backup/config.xml.erb'),
