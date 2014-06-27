@@ -9,6 +9,8 @@ class backup::copy(
   include backup::ulimit
   validate_string($sysuser, $user, $folder)
 
+  ensure_packages(['curl'])
+
   archive {'copy':
     ensure     => present,
     url        => $url,
