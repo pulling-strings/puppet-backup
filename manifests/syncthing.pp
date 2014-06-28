@@ -1,37 +1,31 @@
 # setting up https://github.com/calmh/syncthing
 class backup::syncthing($repos=[]) {
+
+  $version = 'v0.8.17'
+
   case $::operatingsystem {
       'FreeBSD': {
-        $os = 'freebsd'
         $sum ='6d8fd2751e6eecad68dcc6db68b44c86'
         $target = '/usr/local'
-        Package {
-          provider => pkgng
+        $release = "syncthing-freebsd-amd64-${version}"
+        class{'backup::syncthing::freebsd':
+          version => $backup::syncthing::version,
+          release => $backup::syncthing::release
         }
       }
+
       'Ubuntu': {
         $os = 'linux'
+        $release = "syncthing-linux-amd64-${version}"
         $sum = 'a04002d8abce148e504147550b81df60'
         $target = '/opt'
-        file { '/etc/init/syncthing.conf':
-          ensure  => file,
-          mode    => 'u+x',
-          content => template('backup/syncthing.erb'),
-          owner   => root,
-          group   => root,
-        } ->
-
-        file{'/etc/init.d/syncthing':
-          ensure => link,
-          target => '/etc/init/syncthing',
-          mode   => 'a+x',
-        } -> Service['syncthing']
+        $group = 'root'
+        include backup::syncthing::ubuntu
       }
+
       default: {fail('no macthing os found')}
   }
 
-  $version = 'v0.8.17'
-  $release = "syncthing-${os}-amd64-${version}"
   $url = "https://github.com/calmh/syncthing/releases/download/${version}/${release}.tar.gz"
 
   archive {"syncthing-${version}":
@@ -49,7 +43,8 @@ class backup::syncthing($repos=[]) {
     hasstatus => true,
   }
 
-  file{["${target}/syncthing-${version}/.config","${target}/syncthing-${version}/.config/syncthing"]:
+  file{["${target}/syncthing-${version}/.config",
+        "${target}/syncthing-${version}/.config/syncthing"]:
     ensure  => directory,
     require => Archive["syncthing-${version}"]
   } ->
@@ -59,7 +54,7 @@ class backup::syncthing($repos=[]) {
     mode    => 'u+rw',
     content => template('backup/config.xml.erb'),
     owner   => root,
-    group   => root,
+    group   => $group,
     require => Archive["syncthing-${version}"]
   } ~> Service['syncthing']
 }
