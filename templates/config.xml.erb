@@ -1,14 +1,19 @@
 <configuration version="2">
   <% @repos.each_pair do |repo, props| -%>
     <repository id="<%=repo%>" directory="<%=props['directory']%>" ro="<%=props['ro']%>" ignorePerms="false">
-    <node id=""></node>
+    <% props['nodes'].each do |id| -%>
+      <node id="<%=id%>" name="<%=name%>"></node>
+    <% end -%>
     <versioning></versioning>
   </repository>
   <% end -%>
 
-  <node id="" name="<%=@hostname %>">
+  <% @repos.each_pair do |id, name| -%>
+  <node id="<%=id%>" name="<%=name%>">
     <address>dynamic</address>
   </node>
+  <% end -%>
+
   <gui enabled="true" tls="true">
     <address>0.0.0.0:8080</address>
   </gui>

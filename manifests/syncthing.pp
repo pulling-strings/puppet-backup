@@ -1,5 +1,5 @@
 # setting up https://github.com/calmh/syncthing
-class backup::syncthing($repos=[]) {
+class backup::syncthing($repos={}, $nodes={}) {
 
   $version = 'v0.8.17'
 
@@ -28,7 +28,7 @@ class backup::syncthing($repos=[]) {
 
   $url = "https://github.com/calmh/syncthing/releases/download/${version}/${release}.tar.gz"
 
-  archive {"syncthing-${version}":
+  archive {'syncthing':
     ensure        => present,
     url           => $url,
     digest_string => $sum,
@@ -43,18 +43,18 @@ class backup::syncthing($repos=[]) {
     hasstatus => true,
   }
 
-  file{["${target}/syncthing-${version}/.config",
-        "${target}/syncthing-${version}/.config/syncthing"]:
+  file{["${target}/syncthing/.config",
+        "${target}/syncthing/.config/syncthing"]:
     ensure  => directory,
-    require => Archive["syncthing-${version}"]
+    require => Archive['syncthing']
   } ->
 
-  file { "${target}/syncthing-${version}/.config/syncthing/config.xml":
+  file { "${target}/syncthing/.config/syncthing/config.xml":
     ensure  => file,
     mode    => 'u+rw',
     content => template('backup/config.xml.erb'),
     owner   => root,
     group   => $group,
-    require => Archive["syncthing-${version}"]
+    require => Archive['syncthing']
   } ~> Service['syncthing']
 }
