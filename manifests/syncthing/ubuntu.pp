@@ -7,6 +7,7 @@ class backup::syncthing::ubuntu {
     content => template('backup/syncthing.erb'),
     owner   => root,
     group   => root,
+    notify  => Service['syncthing']
   } ->
 
   file{'/etc/init.d/syncthing':
