@@ -4,11 +4,11 @@ start on (starting ufw)
 stop on [!023456]
 
 env STNORESTART=yes
-env HOME=/opt/syncthing-<%=@version%>/<%=@release%>
+env HOME=/opt/syncthing/
 
 respawn
 
 # setuid syncthing
 # setgid syncthing
 
-exec /opt/syncthing-<%=@version%>/<%=@release%>/syncthing -home=/opt/syncthing-<%=@version%>/.config/syncthing >> /var/log/syncthing.log 2>&1
+exec /opt/syncthing/<%=@release%>/syncthing >> /var/log/syncthing.log 2>&1
