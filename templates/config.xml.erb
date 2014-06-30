@@ -2,14 +2,14 @@
   <% @repos.each_pair do |repo, props| -%>
     <repository id="<%=repo%>" directory="<%=props['directory']%>" ro="<%=props['ro']%>" ignorePerms="false">
     <% props['nodes'].each do |id| -%>
-      <node id="<%=id%>" name="<%=name%>"></node>
+      <node id="<%=id%>"></node>
     <% end -%>
     <versioning></versioning>
   </repository>
   <% end -%>
 
-  <% @repos.each_pair do |id, name| -%>
-  <node id="<%=id%>" name="<%=name%>">
+  <% @nodes.each_pair do |id, name|-%>
+ <node id="<%=id%>" name="<%=name%>">
     <address>dynamic</address>
   </node>
   <% end -%>
