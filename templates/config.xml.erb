@@ -8,9 +8,9 @@
   </repository>
   <% end -%>
 
-  <% @nodes.each_pair do |id, name|-%>
- <node id="<%=id%>" name="<%=name%>">
-    <address>dynamic</address>
+  <% @nodes.each_pair do |id, props|-%>
+  <node id="<%=id%>" name="<%=props.name%>">
+    <address>props.address</address>
   </node>
   <% end -%>
 
