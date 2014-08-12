@@ -10,7 +10,7 @@
 
   <% @nodes.each_pair do |id, props|-%>
   <node id="<%=id%>" name="<%=props['name']%>">
-    <address>props['address']</address>
+    <address><%=props['address']%></address>
   </node>
   <% end -%>
 
