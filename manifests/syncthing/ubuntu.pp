@@ -12,7 +12,7 @@ class backup::syncthing::ubuntu {
 
   file{'/etc/init.d/syncthing':
     ensure => link,
-    target => '/etc/init/syncthing',
+    target => '/etc/init/syncthing.conf',
     mode   => 'a+x',
   } -> Service['syncthing']
 
