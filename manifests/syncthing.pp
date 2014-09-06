@@ -3,7 +3,8 @@ class backup::syncthing(
   $repos={},
   $nodes={},
   $user = 'vagrant',
-  $password = '$2a$10$2V8KEPD0vkIqtxeZSikS3OljbZFs1mHf5XujeYBEg197Ht7ua5XA2'
+  $password = '$2a$10$2V8KEPD0vkIqtxeZSikS3OljbZFs1mHf5XujeYBEg197Ht7ua5XA2',
+  $token = ''
 ) {
 
   $version = 'v0.9.9'
