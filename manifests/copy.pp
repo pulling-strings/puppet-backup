@@ -3,7 +3,8 @@ class backup::copy(
   $url     = 'https://copy.com/install/linux/Copy.tgz',
   $sysuser = false,
   $user    = false,
-  $folder  = false
+  $folder  = false,
+  $reinstall = false
   ){
 
   include backup::ulimit
@@ -11,16 +12,27 @@ class backup::copy(
 
   ensure_packages(['curl'])
 
-  archive {'copy':
-    ensure     => present,
-    url        => $url,
-    checksum   => false,
-    src_target => '/var/tmp',
-    target     => '/opt/',
-    extension  => 'tar.gz',
-    root_dir   => 'copy'
+  if($reinstall) {
+    file{'/usr/src/copy.tar.gz':
+      ensure  => absent
+    } ->
+
+    file{'/opt/copy':
+      ensure => absent,
+      force  => true
+    } -> Archive<||>
   }
 
+  archive {'copy':
+    ensure           => present,
+    url              => $url,
+    checksum         => false,
+    src_target       => '/usr/src',
+    target           => '/opt/',
+    extension        => 'tar.gz',
+    strip_components => 1,
+    notify           => Service['copy']
+  } ->
 
   file { '/etc/init/copy.conf':
     ensure  => file,
@@ -33,5 +45,11 @@ class backup::copy(
   file{'/etc/init.d/copy':
     ensure => link,
     target => '/etc/init/copy.conf'
+  } ->
+
+  service{'copy':
+    ensure    => running,
+    enable    => true,
+    hasstatus => true,
   }
 }
