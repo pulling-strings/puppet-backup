@@ -4,6 +4,7 @@
 #  (by default an empty true value).
 define backup::schedule(
   $precondition='true',
+  $onsuccess='',
   $shapping={}
 ) {
 
@@ -17,7 +18,7 @@ define backup::schedule(
   file { "/etc/cron.daily/duply-${name}":
     ensure  => file,
     mode    => '0777',
-    content => template('backup/cron.erb'),
+    content => template('backup/duply_cron.erb'),
     owner   => root,
     group   => root,
   }
