@@ -2,7 +2,7 @@
 # Params:
 # $precondition a check that will be made before the duply job runs
 #  (by default an empty true value).
-define backup::schedule(
+define backup::duply::schedule(
   $precondition='true',
   $onsuccess='',
   $shapping={}
@@ -22,4 +22,6 @@ define backup::schedule(
     owner   => root,
     group   => root,
   }
+
+  backup::duply::rotation {$name: }
 }
