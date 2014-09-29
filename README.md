@@ -1,30 +1,91 @@
 # Intro
 
-A duply based backup puppet module.
+This module support multiple backup/storage setup including:
+
+* Dropbox, headless installation.
+* Copy.com, service and installation.
+* Syncthing, setup peers configuration and repository management.
+* Duply, backup jobs setup and scheduling.
 
 # Usage
 
+## Dropbox
 ```puppet
-$globs='
-- /home/ronen/Virtualbox\ Vms
-- /home/ronen/.*
-- /home/ronen/vim*
-'
+  class{'backup::dropbox':
+    headless => true
+  }
+```
+## Copy
+```puppet
+  class{'backup::copy':
+    reinstall => true
+  }
+```
+## Duply
+```puppet
+  $globs='- /home/vagrant/.*
+  - /home/vagrant/vim*'
 
-# backup jobs
-backup::duply{'your-host-backup':
-  source     => '/home/foo/',
-  target     => 'rsync://foo@backup:22//backup',
-  user       => 'foo',
-  globs      => $globs,
-  tmp        => '/tmp',
-  passphrase => hiera('duply::passphrase')
-}
 
-backup::schedule {'your-host-backup':
-  hour        => '0',
-  type        => 'duply',
-}
+  # backup jobs
+  backup::duply {'sample':
+    source      => '/home/vagrant/',
+    target      => 'file://tmp/backup',
+    target_pass => 'foo',
+    target_user => 'bla',
+    passphrase  => 'blabla',
+    globs       => $globs
+  }
+
+  backup::duply::schedule {'sample':
+    onsuccess => '/usr/sbin/ssmtp foo@gmail.com </etc/duply/sample-msg.txt'
+  }
+
+  backup::duply {'s3-ex':
+    source      => '/home/vagrant/',
+    target      => 's3+http://myUniqueBucketName',
+    target_pass => 'foo',
+    target_user => 'bla',
+    passphrase  => 'blabla',
+    globs       => $globs
+  }
+
+  backup::duply::schedule {'s3-ex':
+    precondition => '-d /tmp',
+    shapping     => {
+      interface  => 'eth0',
+      port       => '2222',
+      limit      => '45kbps'
+    }
+  }
+
+
+```
+
+## Syncthing
+```puppet
+  $repos = {
+    appliances  => {
+      directory => '~/appliances-1',
+      ro        => false,
+      nodes     => [
+        'C56YYFN-U7QEMMU-2J3DVM4-RFHHNAT-FH7ATN6-VJSREZY-XKYXPOF-RSKC7QE',
+      ]
+
+
+    }
+  }
+
+  $nodes = {
+    'C56YYFN-U7QEMMU-2J3DVM4-RFHHNAT-FH7ATN6-VJSREZY-XKYXPOF-RSKC7QE' => {name => 'foo' , address => 'foo:1234'},
+  }
+
+
+  class{'backup::syncthing':
+    repos => $repos,
+    nodes => $nodes,
+    token => 'mhfu4ugmsauj6cgvsu68kvloa1gt3v'
+  }
 ```
 
 # Copyright and license
