@@ -7,11 +7,11 @@ class backup::syncthing(
   $token = ''
 ) {
 
-  $version = 'v0.9.9'
+  $version = 'v0.9.19'
 
   case $::operatingsystem {
       'FreeBSD': {
-        $sum ='cdd03491123a9d342500b5a1d2158f15'
+        $sum ='6d84e10614288af58086825255b361bc'
         $target = '/usr/local'
         $release = "syncthing-freebsd-amd64-${version}"
         class{'backup::syncthing::freebsd':
@@ -23,7 +23,7 @@ class backup::syncthing(
       'Ubuntu': {
         $os = 'linux'
         $release = "syncthing-linux-amd64-${version}"
-        $sum = '58f276046946af7d19462c23e1a87f1d'
+        $sum = 'c37477d1b6647eb741adbaa137843243'
         $target = '/opt'
         $group = 'root'
         include backup::syncthing::ubuntu
