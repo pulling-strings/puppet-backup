@@ -5,6 +5,7 @@
 define backup::duply::schedule(
   $precondition='true',
   $onsuccess='',
+  $email='',
   $shapping={}
 ) {
 

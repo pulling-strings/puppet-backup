@@ -12,6 +12,9 @@ then
 <%unless @onsuccess == ''%>
  <%= @onsuccess %>
 <%end%>
+<%unless @email == ''%>
+ mail -a /var/log/duply_<%=@name%> -s 'duply run done' <%=@email%>
+<%end%>
  echo "*** Backup done $(date -R) ***" >> $LOG
 <%if @run_shapping == true%>
  echo "*** Disabling traffic shapping for <%=@shapping['interface']%> on port <%=@shapping['port']%> of <%=@shapping['limit']%> upload***" >> $LOG
