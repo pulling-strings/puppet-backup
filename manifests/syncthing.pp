@@ -34,6 +34,8 @@ class backup::syncthing(
 
   $url = "https://github.com/syncthing/syncthing/releases/download/${version}/${release}.tar.gz"
 
+  # ensure_resource('package','curl',{'ensure' => 'installed'})
+
   archive {'syncthing':
     ensure        => present,
     url           => $url,
