@@ -7,11 +7,11 @@ class backup::syncthing(
   $token = ''
 ) {
 
-  $version = 'v0.10.3'
+  $version = 'v0.10.11'
 
   case $::operatingsystem {
       'FreeBSD': {
-        $sum ='93b7f064a059f7581fbb2fea44230a56'
+        $sum ='1086962ac5bab9f042bc44269517cced' 
         $target = '/usr/local'
         $release = "syncthing-freebsd-amd64-${version}"
         class{'backup::syncthing::freebsd':
@@ -23,7 +23,7 @@ class backup::syncthing(
       'Ubuntu': {
         $os = 'linux'
         $release = "syncthing-linux-amd64-${version}"
-        $sum = 'f5209a4076e1b75368165094c575f392'
+        $sum = '00551e0c2b8104f9f0ceedf9986b5096'
         $target = '/opt'
         $group = 'root'
         include backup::syncthing::ubuntu
@@ -36,7 +36,7 @@ class backup::syncthing(
 
   # ensure_resource('package','curl',{'ensure' => 'installed'})
 
-  archive {'syncthing':
+  archive {"syncthing-${version}":
     ensure        => present,
     url           => $url,
     digest_string => $sum,
@@ -51,10 +51,14 @@ class backup::syncthing(
     hasstatus => true,
   }
 
+  file{"${target}/syncthing":
+     ensure => directory,
+  } ->
+
   file{["${target}/syncthing/.config",
         "${target}/syncthing/.config/syncthing"]:
     ensure  => directory,
-    require => Archive['syncthing']
+    require => Archive["syncthing-${version}"]
   } ->
 
   file { "${target}/syncthing/.config/syncthing/config.xml":
@@ -63,6 +67,6 @@ class backup::syncthing(
     content => template('backup/config.xml.erb'),
     owner   => root,
     group   => $group,
-    require => Archive['syncthing']
+    require => Archive["syncthing-${version}"]
   } ~> Service['syncthing']
 }
