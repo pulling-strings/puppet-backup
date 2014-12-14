@@ -1,0 +1,11 @@
+# used only for package based dropbox and UI isn't logged
+start on runlevel [2345]
+stop on runlevel [!2345]
+ 
+respawn
+respawn limit 10 5
+ 
+script
+    export LANG=en_US.UTF-8
+    exec su -s /bin/sh -c 'exec "$0" "$@"' <%=@dist_user%> -- /home/<%=@dist_user%>/.dropbox_dist/dropboxd 
+end script

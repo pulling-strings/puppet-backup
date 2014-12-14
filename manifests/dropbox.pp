@@ -3,7 +3,12 @@
 # sudo su -l dropbox -s /bin/bash
 # umask 0027
 # /usr/local/dropbox/.dropbox-dist/dropboxd
-class backup::dropbox($headless=false) {
+# dist_user is used to indicate that while the machine is not headless
+# it still requires the use of an upstart script (avoid the need of login)
+class backup::dropbox(
+  $headless=false,
+  $dist_user=''
+) {
 
   include backup::ulimit
 
@@ -36,11 +41,11 @@ class backup::dropbox($headless=false) {
     } ->
 
     file { '/etc/init/dropbox.conf':
-      ensure=> file,
-      mode  => '0700',
-      source=> 'puppet:///modules/backup/dropbox.conf',
-      owner => root,
-      group => root,
+      ensure => file,
+      mode   => '0700',
+      source => 'puppet:///modules/backup/dropbox.conf',
+      owner  => root,
+      group  => root,
     }
 
     file{'/etc/init.d/dropbox':
@@ -51,10 +56,10 @@ class backup::dropbox($headless=false) {
     $os_lowercase = downcase($::operatingsystem)
 
     apt::source { 'dropbox':
-      location          => "http://linux.dropbox.com/${os_lowercase}",
-      release           => $::lsbdistcodename,
-      repos             => 'main',
-      include_src       => false,
+      location    => "http://linux.dropbox.com/${os_lowercase}",
+      release     => $::lsbdistcodename,
+      repos       => 'main',
+      include_src => false,
     } ->
 
     apt::key { 'dropbox':
@@ -64,6 +69,14 @@ class backup::dropbox($headless=false) {
 
     package{'dropbox':
       ensure  => present
+    }
+
+    file { '/etc/init/dropbox.conf':
+      ensure=> file,
+      mode  => '0644',
+      content => template('template'),
+      owner => root,
+      group => root,
     }
   }
 }
