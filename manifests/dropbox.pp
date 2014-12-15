@@ -3,11 +3,10 @@
 # sudo su -l dropbox -s /bin/bash
 # umask 0027
 # /usr/local/dropbox/.dropbox-dist/dropboxd
-# dist_user is used to indicate that while the machine is not headless
-# it still requires the use of an upstart script (avoid the need of login)
+# Dropbox user is the user running dropbox
 class backup::dropbox(
   $headless=false,
-  $dist_user=''
+  $user=''
 ) {
 
   include backup::ulimit
@@ -52,6 +51,7 @@ class backup::dropbox(
       ensure => link,
       target => '/etc/init/dropbox.conf'
     }
+
   } else {
     $os_lowercase = downcase($::operatingsystem)
 
@@ -71,12 +71,12 @@ class backup::dropbox(
       ensure  => present
     }
 
-    file { '/etc/init/dropbox.conf':
-      ensure=> file,
-      mode  => '0644',
-      content => template('template'),
-      owner => root,
-      group => root,
-    }
+    # file { '/etc/init/dropbox.conf':
+    #   ensure=> file,
+    #   mode  => '0644',
+    #   content => template('template'),
+    #   owner => root,
+    #   group => root,
+    # }
   }
 }
