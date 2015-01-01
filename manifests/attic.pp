@@ -3,6 +3,7 @@ class backup::attic($owner='root',$fuse=false) {
   ensure_resource('class', 'apt', {})
 
   ensure_resource('package', 'build-essential', {ensure => present})
+  ensure_resource('package', 'pkg-config', {ensure => present})
 
   apt::ppa {'ppa:fkrull/deadsnakes':
   } ->
@@ -19,8 +20,7 @@ class backup::attic($owner='root',$fuse=false) {
   }
 
   if($fuse == true){
-    package{['python3-dev', 'libattr1-dev', 'libfuse-dev',
-              'fuse', 'pkg-config']:
+    package{['python3-dev', 'libattr1-dev', 'libfuse-dev', 'fuse']:
       ensure  => present
     } ->
 
