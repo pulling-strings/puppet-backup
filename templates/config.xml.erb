@@ -1,17 +1,16 @@
 <configuration version="7">
   <% @repos.each_pair do |repo, props| -%>
-    <repository id="<%=repo%>" directory="<%=props['directory']%>" ro="<%=props['ro']%>" rescanIntervalS="60" ignorePerms="false">
+  <folder id="<%=repo%>" directory="<%=props['directory']%>" ro="<%=props['ro']%>" rescanIntervalS="60" ignorePerms="false">
     <% props['nodes'].each do |id| -%>
-      <node id="<%=id%>"></node>
+      <device id="<%=id%>"></device>
     <% end -%>
-    <versioning></versioning>
-  </repository>
+  </folder>
   <% end -%>
 
   <% @nodes.each_pair do |id, props|-%>
-  <node id="<%=id%>" name="<%=props['name']%>" compression="true">
+  <device id="<%=id%>" name="<%=props['name']%>">
     <address><%=props['address']%></address>
-  </node>
+  </device>
   <% end -%>
 
   <gui enabled="true" tls="true">
