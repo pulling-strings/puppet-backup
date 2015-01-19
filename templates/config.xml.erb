@@ -1,9 +1,14 @@
 <configuration version="7">
   <% @repos.each_pair do |repo, props| -%>
-  <folder id="<%=repo%>" directory="<%=props['directory']%>" ro="<%=props['ro']%>" rescanIntervalS="60" ignorePerms="false">
+  <folder id="<%=repo%>" path="<%=props['directory']%>" ro="<%=props['ro']%>" rescanIntervalS="60" ignorePerms="false">
     <% props['nodes'].each do |id| -%>
       <device id="<%=id%>"></device>
     <% end -%>
+    <versioning></versioning>
+    <lenientMtimes>false</lenientMtimes>
+    <copiers>1</copiers>
+    <pullers>16</pullers>
+    <hashers>0</hashers>
   </folder>
   <% end -%>
 
