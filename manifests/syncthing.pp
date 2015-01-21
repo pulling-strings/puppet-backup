@@ -1,17 +1,17 @@
 # setting up https://github.com/calmh/syncthing
 class backup::syncthing(
-  $repos={},
   $nodes={},
   $user = 'vagrant',
   $password = '$2a$10$2V8KEPD0vkIqtxeZSikS3OljbZFs1mHf5XujeYBEg197Ht7ua5XA2',
   $token = ''
 ) {
 
+  $repos= hiera_hash('backup::syncthing::repos')
   $version = 'v0.10.11'
 
   case $::operatingsystem {
       'FreeBSD': {
-        $sum ='1086962ac5bab9f042bc44269517cced' 
+        $sum ='1086962ac5bab9f042bc44269517cced'
         $target = '/usr/local'
         $release = "syncthing-freebsd-amd64-${version}"
         class{'backup::syncthing::freebsd':
@@ -52,7 +52,7 @@ class backup::syncthing(
   }
 
   file{"${target}/syncthing":
-     ensure => directory,
+    ensure => directory,
   } ->
 
   file{["${target}/syncthing/.config",
