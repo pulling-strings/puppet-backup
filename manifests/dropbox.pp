@@ -1,9 +1,8 @@
 # Dropbox installation and managment
 # In order to link account in headless mode:
-# sudo su -l dropbox -s /bin/bash
-# umask 0027
-# /usr/local/dropbox/.dropbox-dist/dropboxd
-# Dropbox user is the user running dropbox
+# DAEMON=/usr/local/dropbox/dropbox-deamon/.dropbox-dist/dropboxd
+# sudo start-stop-daemon -o -c $dbuser -S -u $dbuser -x $DAEMON
+# $dbuser is the user running dropbox 
 class backup::dropbox(
   $headless=false,
   $user=''
@@ -39,19 +38,13 @@ class backup::dropbox(
       group  => 'dropbox'
     } ->
 
-    file { '/etc/init/dropbox.conf':
+    file { '/etc/init.d/dropbox':
       ensure => file,
       mode   => '0700',
-      source => 'puppet:///modules/backup/dropbox.conf',
+      source => 'puppet:///modules/backup/dropbox.init',
       owner  => root,
       group  => root,
     }
-
-    file{'/etc/init.d/dropbox':
-      ensure => link,
-      target => '/etc/init/dropbox.conf'
-    }
-
   } else {
     $os_lowercase = downcase($::operatingsystem)
 
