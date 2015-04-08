@@ -1,7 +1,5 @@
 # Setting up https://attic-backup.org/index.html
 class backup::attic($owner='root',$fuse=false) {
-  ensure_resource('class', 'apt', {})
-
   ensure_resource('package', 'build-essential', {ensure => present})
   ensure_resource('package', 'pkg-config', {ensure => present})
 
