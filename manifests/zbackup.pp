@@ -13,7 +13,7 @@ class backup::zbackup {
   }
 
   package{['cmake', 'protobuf-compiler', 'libprotobuf-dev', 'liblzo2-dev',
-            'liblzma-dev']:
+            'liblzma-dev','libssl-dev']:
     ensure  => present
   } ->
 
