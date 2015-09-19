@@ -14,6 +14,11 @@ class backup::rclone(
     target        => '/opt/',
     extension     => 'zip',
     require       => Package['unzip']
+  } ->
+
+  file{'/usr/bin/rclone':
+    ensure => link,
+    target => "/opt/rclone/rclone-${version}-linux-amd64/rclone"
   }
 
 }
