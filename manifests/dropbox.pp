@@ -5,7 +5,9 @@
 # $dbuser is the user running dropbox 
 class backup::dropbox(
   $headless=false,
-  $user=''
+  $user='',
+  $headless_url='https://www.dropbox.com/download?plat=lnx.x86_64',
+  $headless_version = '3.10.9'
 ) {
 
   include backup::ulimit
@@ -13,38 +15,37 @@ class backup::dropbox(
   if($headless) {
     archive { 'dropbox-deamon':
       ensure   => present,
-      url      => 'https://www.dropbox.com/download?plat=lnx.x86_64',
+      url      => $headless_url,
       checksum => false,
-      target   => '/usr/local/dropbox',
-    }
-
-    group{'dropbox':
-      ensure  => present
+      target   => '/usr/local/',
     } ->
 
-    user{'dropbox':
-      ensure     => present,
-      comment    => 'dropbox',
-      groups     => 'dropbox',
-      managehome => true,
-      home       => '/home/dropbox',
-      shell      => '/bin/false',
-      system     => true
+    file{'/usr/local/bin/dropbox':
+      ensure => link,
+      target => "/usr/local/dropbox-deamon/.dropbox-dist/dropbox-lnx.x86_64-${headless_version}/dropbox"
     } ->
 
-    file{'/home/dropbox/Dropbox':
-      ensure => directory,
-      owner  => 'dropbox',
-      group  => 'dropbox'
-    } ->
-
-    file { '/etc/init.d/dropbox':
+    file { '/etc/systemd/system/dropbox.service':
       ensure => file,
       mode   => '0700',
-      source => 'puppet:///modules/backup/dropbox.init',
+      source => 'puppet:///modules/backup/dropbox.service',
       owner  => root,
       group  => root,
+    } ->
+
+    exec{'enable dropbox service':
+      command => 'systemctl enable dropbox',
+      user    => 'root',
+      path    => ['/usr/bin','/bin',],
+      unless  => 'systemctl is-enabled dropbox'
     }
+
+    # service{'dropbox':
+    #   ensure    => running,
+    #   provider  => 'systemd',
+    #   enable    => true,
+    #   hasstatus => true,
+    # }
   } else {
     $os_lowercase = downcase($::operatingsystem)
 
@@ -64,12 +65,5 @@ class backup::dropbox(
       ensure  => present
     }
 
-    # file { '/etc/init/dropbox.conf':
-    #   ensure=> file,
-    #   mode  => '0644',
-    #   content => template('template'),
-    #   owner => root,
-    #   group => root,
-    # }
   }
 }
