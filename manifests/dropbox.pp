@@ -39,13 +39,6 @@ class backup::dropbox(
       path    => ['/usr/bin','/bin',],
       unless  => 'systemctl is-enabled dropbox'
     }
-
-    # service{'dropbox':
-    #   ensure    => running,
-    #   provider  => 'systemd',
-    #   enable    => true,
-    #   hasstatus => true,
-    # }
   } else {
     $os_lowercase = downcase($::operatingsystem)
 
