@@ -12,6 +12,8 @@ class backup::zbackup {
     strip_components => 1
   }
 
+  ensure_packages(['build-essential'])
+
   package{['cmake', 'protobuf-compiler', 'libprotobuf-dev', 'liblzo2-dev',
             'liblzma-dev','libssl-dev']:
     ensure  => present
@@ -22,7 +24,8 @@ class backup::zbackup {
     user    => 'root',
     path    => ['/usr/bin','/bin',],
     cwd     => '/opt/zbackup',
-    unless  => 'test -f /usr/bin/local/zbackup'
+    unless  => 'test -f /usr/bin/local/zbackup',
+    require => Package['build-essential']
   } ->
 
   exec{'make zbackup':
