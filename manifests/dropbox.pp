@@ -43,15 +43,17 @@ class backup::dropbox(
     $os_lowercase = downcase($::operatingsystem)
 
     apt::source { 'dropbox':
-      location    => "http://linux.dropbox.com/${os_lowercase}",
-      release     => $::lsbdistcodename,
-      repos       => 'main',
-      include_src => false,
+      location => "http://linux.dropbox.com/${os_lowercase}",
+      release  => $::lsbdistcodename,
+      repos    => 'main',
+      include  => {
+        src => false,
+      }
     } ->
 
     apt::key { 'dropbox':
-      key        => '5044912E',
-      key_server => 'pgp.mit.edu',
+      id     => '1C61A2656FB57B7E4DE0F4C1FC918B335044912E',
+      server => 'pgp.mit.edu',
     } ->
 
     package{'dropbox':
