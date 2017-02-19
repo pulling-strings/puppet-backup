@@ -1,23 +1,7 @@
 #!/bin/sh
 
-LOG=/var/log/duply_<%=@name%>.log
-if [ <%=@precondition%> ] 
-then
-<%if @run_shapping == true%>
- echo "*** Enabling traffic shapping for <%=@shapping['interface']%> on port <%=@shapping['port']%> of <%=@shapping['limit']%> upload***" >> $LOG
- /usr/local/bin/limit-upload start <%=@shapping['interface']%>  <%=@shapping['limit']%>  <%=@shapping['port']%> >> $LOG
-<%end%>
- echo "*** Starting backup $(date -R) ***" >> $LOG
- duply <%=@name%> backup_verify_purge --force --log-file $LOG
-<%unless @onsuccess == ''%>
- <%= @onsuccess %>
-<%end%>
-<%unless @email == ''%>
- mail -a /var/log/duply_<%=@name%> -s 'duply run done' <%=@email%>
-<%end%>
- echo "*** Backup done $(date -R) ***" >> $LOG
-<%if @run_shapping == true%>
- echo "*** Disabling traffic shapping for <%=@shapping['interface']%> on port <%=@shapping['port']%> of <%=@shapping['limit']%> upload***" >> $LOG
- /usr/local/bin/limit-upload stop <%=@shapping['interface']%>  <%=@shapping['limit']%>  <%=@shapping['port']%> >> $LOG
-<%end%>
-fi
+LOG=/var/log/octo.log
+
+/usr/local/bin/octo /etc/octo.edn > $LOG
+
+
