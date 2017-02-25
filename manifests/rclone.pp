@@ -1,6 +1,6 @@
 # setting up http://rclone.org/
 class backup::rclone(
-  $version = 'v1.23'
+  $version = 'v1.35'
 ) {
 
   $arch = $::architecture ? {
@@ -9,8 +9,8 @@ class backup::rclone(
   }
 
   $sum = $::architecture ? {
-    'amd64'  => 'e33fe68ced1263c8e056effd99c49ad4',
-    'armv6l' => '9898b16436f74effd64a46af26e25362'
+    'amd64'  => '398d20b3c849e5c20d0a9c1db8d25bfd',
+    'armv6l' => '3f358b653dc04b8304d0a5cb5a6e444b'
   }
 
   $url = "http://downloads.rclone.org/rclone-${version}-linux-${arch}.zip"

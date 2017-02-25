@@ -5,8 +5,8 @@ class backup::zbackup {
 
   archive {'zbackup':
     ensure           => present,
-    url              => 'https://github.com/zbackup/zbackup/archive/1.4.2.tar.gz',
-    digest_string    => 'eceb8c81ce593205cb51c6bb74031764' ,
+    url              => 'https://github.com/zbackup/zbackup/archive/1.4.4.tar.gz',
+    digest_string    => '0753ca5d61533f951d6ebb6f087efa0b' ,
     src_target       => '/usr/src',
     target           => '/opt/',
     strip_components => 1
