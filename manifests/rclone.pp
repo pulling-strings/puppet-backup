@@ -13,7 +13,8 @@ class backup::rclone(
     'armv6l' => '3f358b653dc04b8304d0a5cb5a6e444b'
   }
 
-  $url = "http://downloads.rclone.org/rclone-${version}-linux-${arch}.zip"
+  
+  $url = "https://github.com/ncw/rclone/releases/download/${version}/rclone-${version}-linux-${arch}.zip"
 
   ensure_packages(['unzip'])
 
