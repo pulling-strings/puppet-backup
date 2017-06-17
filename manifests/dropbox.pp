@@ -7,7 +7,7 @@ class backup::dropbox(
   $headless=false,
   $user='',
   $headless_url='https://www.dropbox.com/download?plat=lnx.x86_64',
-  $headless_version = '3.10.9'
+  $headless_version = '28.4.14'
 ) {
 
   include backup::ulimit
@@ -18,6 +18,7 @@ class backup::dropbox(
       url      => $headless_url,
       checksum => false,
       target   => '/usr/local/',
+      timeout  => 6000
     } ->
 
     file{'/usr/local/bin/dropbox':
