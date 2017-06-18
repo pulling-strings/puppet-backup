@@ -1,18 +1,18 @@
-# Dropbox installation and managment
-# In order to link account in headless mode:
-# DAEMON=/usr/local/dropbox/dropbox-deamon/.dropbox-dist/dropboxd
-# sudo start-stop-daemon -o -c $dbuser -S -u $dbuser -x $DAEMON
-# $dbuser is the user running dropbox 
+# Dropbox installation and managment (make sure to link in headless mode)
 class backup::dropbox(
   $headless=false,
-  $user='',
-  $headless_url='https://www.dropbox.com/download?plat=lnx.x86_64',
-  $headless_version = '28.4.14'
+  $home=false,
+  $user=false,
 ) {
 
+  include downloadfile
   include backup::ulimit
 
   if($headless) {
+    $headless_url='https://www.dropbox.com/download?plat=lnx.x86_64'
+    validate_string($home)
+    validate_string($user)
+
     archive { 'dropbox-deamon':
       ensure   => present,
       url      => $headless_url,
@@ -21,25 +21,25 @@ class backup::dropbox(
       timeout  => 6000
     } ->
 
-    file{'/usr/local/bin/dropbox':
+    file{"${home}/.dropbox-dist":
       ensure => link,
-      target => "/usr/local/dropbox-deamon/.dropbox-dist/dropbox-lnx.x86_64-${headless_version}/dropbox"
-    } ->
-
-    file { '/etc/systemd/system/dropbox.service':
-      ensure => file,
-      mode   => '0700',
-      source => 'puppet:///modules/backup/dropbox.service',
-      owner  => root,
-      group  => root,
-    } ->
-
-    exec{'enable dropbox service':
-      command => 'systemctl enable dropbox',
-      user    => 'root',
-      path    => ['/usr/bin','/bin',],
-      unless  => 'systemctl is-enabled dropbox'
+      target => "/usr/local/dropbox-deamon/.dropbox-dist/"
     }
+
+    file{"${home}/bin/":
+      ensure => directory,
+    } ->
+
+    downloadfile::and_md5check { 'dropbox':
+      url    => 'https://www.dropbox.com/download?dl=packages/dropbox.py',
+      dest   => "${home}/bin/dropbox",
+      md5sum => 'd7e01a4d178674f1895dc3f74adb7f36',
+      user   => $user,
+      group  => $user,
+      chmod  => '770',
+    }
+
+
   } else {
     $os_lowercase = downcase($::operatingsystem)
 
