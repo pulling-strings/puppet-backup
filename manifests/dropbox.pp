@@ -1,8 +1,8 @@
 # Dropbox installation and managment (make sure to link in headless mode)
 class backup::dropbox(
-  $headless=false,
-  $home=false,
-  $user=false,
+  Boolean $headless=false,
+  String $home='',
+  String $user='',
 ) {
 
   include downloadfile
@@ -10,8 +10,6 @@ class backup::dropbox(
 
   if($headless) {
     $headless_url='https://www.dropbox.com/download?plat=lnx.x86_64'
-    validate_string($home)
-    validate_string($user)
 
     archive { 'dropbox-deamon':
       ensure   => present,
@@ -19,18 +17,18 @@ class backup::dropbox(
       checksum => false,
       target   => '/usr/local/',
       timeout  => 6000
-    } ->
+    }
 
-    file{"${home}/.dropbox-dist":
+    -> file{"${home}/.dropbox-dist":
       ensure => link,
-      target => "/usr/local/dropbox-deamon/.dropbox-dist/"
+      target => '/usr/local/dropbox-deamon/.dropbox-dist/'
     }
 
     file{"${home}/bin/":
       ensure => directory,
-    } ->
+    }
 
-    downloadfile::and_md5check { 'dropbox':
+    -> downloadfile::and_md5check { 'dropbox':
       url    => 'https://www.dropbox.com/download?dl=packages/dropbox.py',
       dest   => "${home}/bin/dropbox",
       md5sum => 'd7e01a4d178674f1895dc3f74adb7f36',
@@ -50,14 +48,14 @@ class backup::dropbox(
       include  => {
         src => false,
       }
-    } ->
+    }
 
-    apt::key { 'dropbox':
+    -> apt::key { 'dropbox':
       id     => '1C61A2656FB57B7E4DE0F4C1FC918B335044912E',
       server => 'pgp.mit.edu',
-    } ->
+    }
 
-    package{'dropbox':
+    -> package{'dropbox':
       ensure  => present
     }
 
