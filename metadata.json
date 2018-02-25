@@ -1,0 +1,27 @@
+{
+  "name": "puppet-backup",
+  "version": "0.2.0",
+  "author": "Ronen Narkis",
+  "summary": "Setting up backup utilities and services like dropbox, zbackup, etc..",
+  "license": "Apache-2.0",
+  "source": "https://github.com/pulling-strings/puppet-backup",
+  "project_page": "https://github.com/pulling-strings/puppet-backup",
+  "issues_url": "https://github.com/pulling-strings/puppet-backup",
+  "dependencies": [
+  ],
+  "data_provider": null,
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9.0"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 4.0.0"
+    }
+  ]
+}

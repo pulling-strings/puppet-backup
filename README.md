@@ -15,52 +15,6 @@ This module support multiple backup/storage setup including:
     headless => true
   }
 ```
-## Copy
-```puppet
-  class{'backup::copy':
-    reinstall => true
-  }
-```
-## Duply
-```puppet
-  $globs='- /home/vagrant/.*
-  - /home/vagrant/vim*'
-
-
-  # backup jobs
-  backup::duply {'sample':
-    source      => '/home/vagrant/',
-    target      => 'file://tmp/backup',
-    target_pass => 'foo',
-    target_user => 'bla',
-    passphrase  => 'blabla',
-    globs       => $globs
-  }
-
-  backup::duply::schedule {'sample':
-    onsuccess => '/usr/sbin/ssmtp foo@gmail.com </etc/duply/sample-msg.txt'
-  }
-
-  backup::duply {'s3-ex':
-    source      => '/home/vagrant/',
-    target      => 's3+http://myUniqueBucketName',
-    target_pass => 'foo',
-    target_user => 'bla',
-    passphrase  => 'blabla',
-    globs       => $globs
-  }
-
-  backup::duply::schedule {'s3-ex':
-    precondition => '-d /tmp',
-    shapping     => {
-      interface  => 'eth0',
-      port       => '2222',
-      limit      => '45kbps'
-    }
-  }
-
-
-```
 
 ## Syncthing
 ```puppet
@@ -90,7 +44,7 @@ This module support multiple backup/storage setup including:
 
 # Copyright and license
 
-Copyright [2013] [Ronen Narkis]
+Copyright [2018] [Ronen Narkis]
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
