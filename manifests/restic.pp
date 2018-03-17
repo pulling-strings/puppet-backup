@@ -10,20 +10,29 @@ class backup::restic {
 
   $url = "https://github.com/restic/restic/releases/download/v${version}/restic_${version}_linux_amd64.bz2"
 
-  archive { "restic_${version}_linux_amd64":
-    ensure        => present,
-    url           => $url,
-    digest_string => '1e9aca80c4f4e263c72a83d4333a9dac0e24b24e1fe11a8dc1d9b38d77883705',
-    digest_type   => 'sha256',
-    src_target    => '/opt',
-    target        => '/usr/share/restic/',
-    extension     => 'bzip',
-    require       => Package['bzip2'],
+  file{'/usr/share/restic':
+    ensure => directory,
+  }
+
+  -> downloadfile::and_md5check { "restic_${version}_linux_amd64":
+      url    => $url,
+      dest   => "/usr/share/restic/restic_${version}_linux_amd64",
+      md5sum => '10b5fd75191637a1411027b9470e375c',
+      chmod  => 'a+rx',
+      user   => root,
+      group  => root,
+  }
+
+  -> exec{'extract restic':
+    command => "/bin/bzip2 -d restic_${version}_linux_amd64",
+    user    => 'root',
+    path    => ['/usr/bin','/bin',],
+    cwd     => '/usr/share/restic/'
   }
 
   -> file{'/usr/bin/restic':
     ensure => link,
-    target => "/usr/share/restic/restic_${version}_linux_amd64"
+    target => "/usr/share/restic/restic_${version}_linux_amd64.out"
   }
 
 }
